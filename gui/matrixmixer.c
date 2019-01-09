@@ -285,7 +285,7 @@ toplevel (MatMixUI* ui, void* const top)
 	/* matrix */
 	for (unsigned int r = 0; r < N_INPUTS; ++r) {
 		char txt[16];
-		sprintf (txt, "In %d", r);
+		sprintf (txt, "In %d", r + 1);
 		ui->mtx_lbl_i[r] = robtk_lbl_new (txt);
 		rob_table_attach (ui->matrix, robtk_lbl_widget (ui->mtx_lbl_i[r]),
 		                  0, 1,
@@ -346,7 +346,7 @@ toplevel (MatMixUI* ui, void* const top)
 	/* matrix out labels */
 	for (unsigned int c = 0; c < N_OUTPUTS; ++c) {
 		char txt[16];
-		sprintf (txt, "Out %d", c);
+		sprintf (txt, "Out %d", c + 1);
 		ui->mtx_lbl_o[c] = robtk_lbl_new (txt);
 		rob_table_attach (ui->matrix, robtk_lbl_widget (ui->mtx_lbl_o[c]),
 		                  c + 1, c + 2,
