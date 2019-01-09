@@ -18,7 +18,7 @@ STRIP?= strip
 
 # grid-size (should be at least 4x4 for the MOD-GUI)
 N_INPUTS ?= 8
-N_OUPUTS ?= 8
+N_OUTPUTS ?= 8
 
 BUILDOPENGL?=yes
 BUILDJACKAPP?=yes
@@ -37,8 +37,8 @@ LV2NAME=matrixmixer
 LV2GUI=matrixmixerUI_gl
 BUNDLE=matrixmixer.lv2
 
-URISUFFIX=i$(N_INPUTS)o$(N_OUPUTS)
-NAMESUFFIX=$(N_INPUTS)x$(N_OUPUTS)
+URISUFFIX=i$(N_INPUTS)o$(N_OUTPUTS)
+NAMESUFFIX=$(N_INPUTS)x$(N_OUTPUTS)
 
 targets=
 
@@ -226,14 +226,14 @@ $(BUILDDIR)$(LV2NAME).ttl: lv2ttl/$(LV2NAME).ttl.in lv2ttl/$(LV2NAME).gui.in Mak
 	@mkdir -p $(BUILDDIR)
 	sed "s/@LV2NAME@/$(LV2NAME)/g;s/@SIGNATURE@/$(LV2SIGN)/;s/@NAMESUFFIX@/$(NAMESUFFIX)/;s/@URISUFFIX@/$(URISUFFIX)/;s/@VERSION@/lv2:microVersion $(LV2MIC) ;lv2:minorVersion $(LV2MIN) ;/g;s/@UITTL@/$(UITTL)/" \
 	    lv2ttl/$(LV2NAME).ttl.in > $(BUILDDIR)$(LV2NAME).ttl
-	./genttl.sh $(N_INPUTS) $(N_OUPUTS) >> $(BUILDDIR)$(LV2NAME).ttl
+	./genttl.sh $(N_INPUTS) $(N_OUTPUTS) >> $(BUILDDIR)$(LV2NAME).ttl
 	echo "]; ." >> $(BUILDDIR)$(LV2NAME).ttl
 ifneq ($(BUILDOPENGL), no)
 	sed "s/@LV2NAME@/$(LV2NAME)/g;s/@URISUFFIX@/$(URISUFFIX)/;s/@UI_TYPE@/$(UI_TYPE)/;s/@UI_REQ@/$(LV2UIREQ)/" \
 	    lv2ttl/$(LV2NAME).gui.in >> $(BUILDDIR)$(LV2NAME).ttl
 endif
 
-override CFLAGS+= -DN_INPUTS=$(N_INPUTS) -DN_OUTPUTS=$(N_OUPUTS)
+override CFLAGS+= -DN_INPUTS=$(N_INPUTS) -DN_OUTPUTS=$(N_OUTPUTS)
 
 DSP_SRC = src/$(LV2NAME).c
 DSP_DEPS = $(DSP_SRC) src/$(LV2NAME).h
@@ -248,7 +248,7 @@ $(BUILDDIR)$(LV2NAME)$(LIB_EXT): $(DSP_DEPS) Makefile
 
 $(APPBLD)matrixmixer.h: Makefile
 	@mkdir -p $(APPBLD)
-	./genhead.sh $(N_INPUTS) $(N_OUPUTS) > $(APPBLD)matrixmixer.h
+	./genhead.sh $(N_INPUTS) $(N_OUTPUTS) > $(APPBLD)matrixmixer.h
 
 jackapps: $(JACKAPP)
 
