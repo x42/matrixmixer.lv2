@@ -79,6 +79,9 @@ connect_port (
 static void
 process_inplace (float const* const* ins, float* const* outs, float* gain, uint32_t n_samples)
 {
+	/* LV2 allows in-place processing  ins == outs.
+	 * we need to buffer outputs to avoid overwriting data
+	 */
 	float buf[N_OUTPUTS][MAX_NPROC];
 
 	/* 1st row, set outputs */
@@ -89,7 +92,7 @@ process_inplace (float const* const* ins, float* const* outs, float* gain, uint3
 		}
 	}
 
-	/* remaining rows, add to ouput */
+	/* remaining rows, add to output */
 	for (uint32_t r = 1; r < N_INPUTS; ++r) {
 		in = ins[r];
 		for (uint32_t c = 0; c < N_OUTPUTS; ++c) {
@@ -133,6 +136,7 @@ run (LV2_Handle handle, uint32_t n_samples)
 		float const* inp[N_INPUTS];
 		float*       outp[N_OUTPUTS];
 
+		/* prepare buffer-pointers for this sub-cycle */
 		for (uint32_t r = 0; r < N_INPUTS; ++r) {
 			inp[r] = &ins[r][offset];
 		}
@@ -142,6 +146,7 @@ run (LV2_Handle handle, uint32_t n_samples)
 
 		process_inplace (inp, outp, gain, n_proc);
 
+		/* low-pass filter gain coefficient */
 		for (int i = 0; i < N_INPUTS * N_OUTPUTS; ++i) {
 			if (fabsf (gain[i] - gain_target[i]) < 1e-6) {
 				gain[i] = gain_target[i];
