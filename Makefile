@@ -299,15 +299,15 @@ uninstall-bin:
 install-man:
 ifneq ($(BUILDJACKAPP), no)
 	install -d $(DESTDIR)$(MANDIR)
-	install -m644 x42-matrixmixer$(NAMESUFFIX).1 $(DESTDIR)$(MANDIR)
+	install -m644 x42-matrixmixer.1 $(DESTDIR)$(MANDIR)
 endif
 
 uninstall-man:
-	rm -f $(DESTDIR)$(MANDIR)/x42-matrixmixer$(NAMESUFFIX).1
+	rm -f $(DESTDIR)$(MANDIR)/x42-matrixmixer.1
 	-rmdir $(DESTDIR)$(MANDIR)
 
 man: $(APPBLD)x42-matrixmixer$(NAMESUFFIX)
-	help2man -N -o x42-matrixmixer$(NAMESUFFIX).1 -n "JACK Matrix Mixer" $(APPBLD)x42-matrixmixer$(NAMESUFFIX)
+	help2man -N -o x42-matrixmixer.1 -n "JACK Matrix Mixer" $(APPBLD)x42-matrixmixer$(NAMESUFFIX)
 
 clean:
 	rm -f $(BUILDDIR)manifest.ttl $(BUILDDIR)$(LV2NAME).ttl \
