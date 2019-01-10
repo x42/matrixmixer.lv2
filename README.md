@@ -4,6 +4,7 @@ Matrix-Mixer
 matrixmixer.lv2 is a matrix mixer :)
 
 It is available as [LV2 plugin](http://lv2plug.in/) and standalone [JACK](http://jackaudio.org/)-application.
+The jack application can run headless and be remote controlled via [OSC](http://opensoundcontrol.org/).
 
 Install
 -------
@@ -24,9 +25,8 @@ as `CFLAGS`, `LDFLAGS` and `OPTIMIZATIONS` (additions to `CFLAGS`), also
 see the first 10 lines of the Makefile.
 You really want to package the superset of [x42-plugins](https://github.com/x42/x42-plugins).
 
-The number of I/O can be set at compile time using `N_INPUTS`
-and `N_OUTPUTS` make variables. The default is 8x8. `make clean` is needed
-when changing the matrix size.
+The number of I/O can be set at compile time using `N_INPUTS` and `N_OUTPUTS` make variables.
+The default is 8x8. Note that to change the size, a `make clean` is needed.
 
 Usage
 -----
@@ -37,6 +37,6 @@ Usage
 Screenshots
 -----------
 
-![screenshot](https://raw.github.com/x42/matrixmixer.lv2/master/img/matrix16x16.png "MatrixMixer 20x16 GUI")
+![screenshot](https://raw.github.com/x42/matrixmixer.lv2/master/img/matrix16x20.png "MatrixMixer 16x20 GUI")
 
-Compiler with `make N_INPUTS=16 N_OUTPUTS=16`
+Compiled with `make N_INPUTS=16 N_OUTPUTS=20`
