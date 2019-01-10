@@ -164,9 +164,27 @@ create_faceplate (MatMixUI* ui)
 }
 
 static float
+knob_pos_to_gain (float v)
+{
+	if (v == 0.f) {
+		return 0;
+	}
+	return exp (((pow (fabs (v), 0.125) * 150.) - 144.) * log (2.) / 6.);
+}
+
+static float
+knob_gain_to_pos (float v)
+{
+	if (v == 0.f) {
+		return 0;
+	}
+	return pow ((6. * log (fabs (v)) / log (2.) + 144.) / 150., 8.);
+}
+
+static float
 knob_to_db (float v)
 {
-	return 20.f * log10f (v);
+	return 20.f * log10f (knob_pos_to_gain (v));
 }
 
 static void
@@ -201,7 +219,7 @@ dial_annotation_db (RobTkDial* d, cairo_t* cr, void* data)
 	cairo_new_path (cr);
 }
 
-/******************************************************************************
+/* ****************************************************************************
  * UI callbacks
  */
 
@@ -217,7 +235,7 @@ cb_mtx_gain (RobWidget* w, void* handle)
 	unsigned int n;
 	memcpy (&n, w->name, sizeof (unsigned int));
 
-	float val = robtk_dial_get_value (ui->mtx_gain[n]);
+	float val = knob_pos_to_gain (robtk_dial_get_value (ui->mtx_gain[n]));
 	if (robtk_dial_get_state (ui->mtx_gain[n]) == 1) {
 		val *= -1;
 	}
@@ -247,12 +265,12 @@ robtk_dial_mouse_intercept (RobWidget* handle, RobTkBtnEvent* ev)
 			unsigned int nn = r * N_OUTPUTS + i;
 			if (i == c) {
 				if (d->cur == 0) {
-					robtk_dial_set_value (ui->mtx_gain[nn], 1.f);
+					robtk_dial_set_value (ui->mtx_gain[nn], knob_gain_to_pos (1.f));
 				} else {
-					robtk_dial_set_value (ui->mtx_gain[nn], 0.f);
+					robtk_dial_set_value (ui->mtx_gain[nn], knob_gain_to_pos (0.f));
 				}
 			} else {
-				robtk_dial_set_value (ui->mtx_gain[nn], 0.f);
+				robtk_dial_set_value (ui->mtx_gain[nn], knob_gain_to_pos (0.f));
 			}
 		}
 		return handle;
@@ -298,10 +316,10 @@ toplevel (MatMixUI* ui, void* const top)
 			// TODO log-scale mapping  -inf || -60 .. +6dB
 
 			ui->mtx_gain[n] = robtk_dial_new_with_size (
-			    0, 2, 1.f / 80.f,
+			    0, 1, knob_gain_to_pos(1.0) / 192.f,
 			    GD_WIDTH, GED_HEIGHT, GD_CX, GD_CY, GED_RADIUS);
 
-			robtk_dial_set_default (ui->mtx_gain[n], c == r ? 1 : 0);
+			robtk_dial_set_default (ui->mtx_gain[n], knob_gain_to_pos (c == r ? 1 : 0));
 			robtk_dial_set_callback (ui->mtx_gain[n], cb_mtx_gain, ui);
 			robtk_dial_annotation_callback (ui->mtx_gain[n], dial_annotation_db, ui);
 
@@ -463,7 +481,8 @@ port_event (
 
 	if (port >= M_OFFSET && port < M_OFFSET + M_SIZE) {
 		ui->disable_signals = true;
-		robtk_dial_set_value (ui->mtx_gain[port - M_OFFSET], v);
+		robtk_dial_set_value (ui->mtx_gain[port - M_OFFSET], knob_gain_to_pos (v));
+		robtk_dial_set_state (ui->mtx_gain[port - M_OFFSET], v < 0 ? 1 : 0);
 		ui->disable_signals = false;
 	}
 }
