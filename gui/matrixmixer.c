@@ -27,9 +27,11 @@
 #define RTK_URI MATMIX_URI
 #define RTK_GUI "ui"
 
-#define GD_WIDTH 41
-#define GD_CX 20.5
-#define GD_CY 15.5
+#define GD_W  35
+#define GD_H  34
+#define GD_RAD 10
+#define GD_CX 17.5
+#define GD_CY 17.5
 
 #define M_OFFSET (N_INPUTS + N_OUTPUTS)
 #define M_SIZE (N_INPUTS * N_OUTPUTS)
@@ -63,10 +65,11 @@ create_faceplate (MatMixUI* ui)
 	get_color_from_theme (1, c_bg);
 
 #define MTX_SF(SF)                                                             \
-  SF = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, GD_WIDTH, GED_HEIGHT); \
+  SF = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2 * GD_W, 2 * GD_H);   \
   cr = cairo_create (SF);                                                      \
+  cairo_scale (cr, 2.0, 2.0);                                                  \
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);                              \
-  cairo_rectangle (cr, 0, 0, GD_WIDTH, GED_HEIGHT);                            \
+  cairo_rectangle (cr, 0, 0, GD_W, GD_H);                                      \
   CairoSetSouerceRGBA (c_bg);                                                  \
   cairo_fill (cr);                                                             \
   CairoSetSouerceRGBA (c_g60);                                                 \
@@ -80,11 +83,11 @@ create_faceplate (MatMixUI* ui)
   cairo_close_path (cr);          \
   cairo_fill (cr);
 
-#define MTX_ARROW_V                      \
-  cairo_move_to (cr, GD_CX, GED_HEIGHT); \
-  cairo_rel_line_to (cr, -4, -5);        \
-  cairo_rel_line_to (cr, 8, 0);          \
-  cairo_close_path (cr);                 \
+#define MTX_ARROW_V                \
+  cairo_move_to (cr, GD_CX, GD_H); \
+  cairo_rel_line_to (cr, -4, -5);  \
+  cairo_rel_line_to (cr, 8, 0);    \
+  cairo_close_path (cr);           \
   cairo_fill (cr);
 
 	MTX_SF (ui->mtx_sf[0]);
@@ -92,10 +95,10 @@ create_faceplate (MatMixUI* ui)
 	MTX_ARROW_V;
 
 	cairo_move_to (cr, 0, GD_CY);
-	cairo_line_to (cr, GD_WIDTH, GD_CY);
+	cairo_line_to (cr, GD_W, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, 0);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 
@@ -105,10 +108,10 @@ create_faceplate (MatMixUI* ui)
 	MTX_ARROW_V;
 
 	cairo_move_to (cr, 0, GD_CY);
-	cairo_line_to (cr, GD_WIDTH, GD_CY);
+	cairo_line_to (cr, GD_W, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, GD_CY);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 
@@ -117,10 +120,10 @@ create_faceplate (MatMixUI* ui)
 	MTX_ARROW_V;
 
 	cairo_move_to (cr, 0, GD_CY);
-	cairo_line_to (cr, GD_WIDTH, GD_CY);
+	cairo_line_to (cr, GD_W, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, 0);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 
@@ -133,7 +136,7 @@ create_faceplate (MatMixUI* ui)
 	cairo_line_to (cr, GD_CX, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, 0);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 
@@ -142,10 +145,10 @@ create_faceplate (MatMixUI* ui)
 	MTX_ARROW_V;
 
 	cairo_move_to (cr, 0, GD_CY);
-	cairo_line_to (cr, GD_WIDTH, GD_CY);
+	cairo_line_to (cr, GD_W, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, GD_CY);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 
@@ -158,7 +161,7 @@ create_faceplate (MatMixUI* ui)
 	cairo_line_to (cr, GD_CX, GD_CY);
 	cairo_stroke (cr);
 	cairo_move_to (cr, GD_CX, GD_CY);
-	cairo_line_to (cr, GD_CX, GED_HEIGHT);
+	cairo_line_to (cr, GD_CX, GD_H);
 	cairo_stroke (cr);
 	cairo_destroy (cr);
 }
@@ -287,6 +290,7 @@ toplevel (MatMixUI* ui, void* const top)
 {
 	ui->rw = rob_vbox_new (FALSE, 2);
 	robwidget_make_toplevel (ui->rw, top);
+	robwidget_toplevel_enable_scaling (ui->rw);
 
 	ui->font = pango_font_description_from_string ("Mono 9px");
 
@@ -317,7 +321,7 @@ toplevel (MatMixUI* ui, void* const top)
 
 			ui->mtx_gain[n] = robtk_dial_new_with_size (
 			    0, 1, knob_gain_to_pos(1.0) / 192.f,
-			    GD_WIDTH, GED_HEIGHT, GD_CX, GD_CY, GED_RADIUS);
+			    GD_W, GD_H, GD_CX, GD_CY, GD_RAD);
 
 			robtk_dial_set_default (ui->mtx_gain[n], knob_gain_to_pos (c == r ? 1 : 0));
 			robtk_dial_set_callback (ui->mtx_gain[n], cb_mtx_gain, ui);
@@ -328,10 +332,7 @@ toplevel (MatMixUI* ui, void* const top)
 			robtk_dial_set_default_state (ui->mtx_gain[n], 0);
 
 			robwidget_set_mousedown (ui->mtx_gain[n]->rw, robtk_dial_mouse_intercept);
-
-			if (c != r) {
-				ui->mtx_gain[n]->displaymode = 3;
-			}
+			ui->mtx_gain[n]->displaymode = 3;
 
 			if (ui->touch) {
 				robtk_dial_set_touch (ui->mtx_gain[n], ui->touch->touch, ui->touch->handle, M_OFFSET + n);
@@ -339,17 +340,17 @@ toplevel (MatMixUI* ui, void* const top)
 
 			/* set faceplate */
 			if (c == N_OUTPUTS - 1 && r == 0) {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[5]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[5], 2.0);
 			} else if (c == 0 && r == 0) {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[4]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[4], 2.0);
 			} else if (c == N_OUTPUTS - 1) {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[3]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[3], 2.0);
 			} else if (c == 0) {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[2]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[2], 2.0);
 			} else if (r == 0) {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[1]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[1], 2.0);
 			} else {
-				robtk_dial_set_surface (ui->mtx_gain[n], ui->mtx_sf[0]);
+				robtk_dial_set_scaled_surface_scale (ui->mtx_gain[n], ui->mtx_sf[0], 2.0);
 			}
 
 			rob_table_attach (ui->matrix, robtk_dial_widget (ui->mtx_gain[n]),
@@ -364,7 +365,7 @@ toplevel (MatMixUI* ui, void* const top)
 	/* matrix out labels */
 	for (unsigned int c = 0; c < N_OUTPUTS; ++c) {
 		char txt[16];
-		sprintf (txt, "Out %d", c + 1);
+		sprintf (txt, "Out\n%d", c + 1);
 		ui->mtx_lbl_o[c] = robtk_lbl_new (txt);
 		rob_table_attach (ui->matrix, robtk_lbl_widget (ui->mtx_lbl_o[c]),
 		                  c + 1, c + 2,
