@@ -77,7 +77,7 @@ connect_port (
 }
 
 static void
-process_inplace (float const* const* ins, float* const* outs, float* gain, uint32_t n_samples)
+process_inplace (float const* const* ins, float* const* outs, float const* const gain, uint32_t n_samples)
 {
 	/* LV2 allows in-place processing  ins == outs.
 	 * we need to buffer outputs to avoid overwriting data
