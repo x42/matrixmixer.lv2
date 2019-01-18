@@ -32,7 +32,7 @@ Usage
 -----
 * Click+drag or scroll-wheel on a knob to change gain
 * Left-click a control to invert polarity (knob turns red)
-* Middle-click on a knob to exclusively assign to to the current row
+* Middle-click on a knob to exclusively assign it in the current row
 
 Screenshots
 -----------
