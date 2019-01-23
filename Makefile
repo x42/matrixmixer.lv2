@@ -194,7 +194,6 @@ JACKCFLAGS=-I. $(CFLAGS) $(LIC_CFLAGS)
 JACKCFLAGS+=`$(PKG_CONFIG) --cflags jack lv2 pango pangocairo $(PKG_GL_LIBS)`
 JACKLIBS=-lm $(GLUILIBS) $(LOADLIBES)
 
-
 ###############################################################################
 # build target definitions
 default: all
