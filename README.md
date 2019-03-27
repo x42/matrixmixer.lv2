@@ -10,14 +10,15 @@ Install
 -------
 
 Compilation requires the LV2 SDK, jack-headers, gnu-make, a c-compiler,
-libpango, libcairo and openGL (sometimes called: glu, glx, mesa).
+libpango, libcairo, openGL (sometimes called: glu, glx, mesa), and
+optionally libjack and liblo (for jack-app with remote-control)
 
 ```bash
-  git clone git://github.com/x42/matrixmixer.lv2
-  cd matrixmixer.lv2
-  make submodules
-  make
-  sudo make install PREFIX=/usr
+git clone git://github.com/x42/matrixmixer.lv2
+cd matrixmixer.lv2
+make submodules
+make
+#sudo make install PREFIX=/usr
 ```
 
 Note to packagers: The Makefile honors `PREFIX` and `DESTDIR` variables as well
@@ -32,7 +33,8 @@ Usage
 -----
 * Click+drag or scroll-wheel on a knob to change gain
 * Left-click a control to invert polarity (knob turns red)
-* Middle-click on a knob to exclusively assign it in the current row
+* Middle-click on a knob to exclusively un/assigns it in the current row
+* Right-click on a knob to toggle current/default value (by default matching I/O on the diagonal is set to 0dB)
 
 Screenshots
 -----------
