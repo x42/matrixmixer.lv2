@@ -226,19 +226,38 @@ dial_annotation_db (RobTkDial* d, cairo_t* cr, void* data)
  * UI callbacks
  */
 
+static void
+set_dot_color (RobTkDial* dial, float gain)
+{
+	if (gain == 0.f) {
+		dial->dcol[0][0] = .05;
+		dial->dcol[0][1] = .05;
+		dial->dcol[0][2] = .05;
+	} else if (gain == 1.f) {
+		dial->dcol[0][0] = .20;
+		dial->dcol[0][1] = 1.0;
+		dial->dcol[0][2] = .20;
+	} else {
+		dial->dcol[0][0] = .95;
+		dial->dcol[0][1] = .95;
+		dial->dcol[0][2] = .95;
+	}
+}
+
 static bool
 cb_mtx_gain (RobWidget* w, void* handle)
 {
 	MatMixUI* ui = (MatMixUI*)handle;
 
+	unsigned int n;
+	memcpy (&n, w->name, sizeof (unsigned int));
+	float val = knob_pos_to_gain (robtk_dial_get_value (ui->mtx_gain[n]));
+	set_dot_color (ui->mtx_gain[n], val);
+
 	if (ui->disable_signals) {
 		return TRUE;
 	}
 
-	unsigned int n;
-	memcpy (&n, w->name, sizeof (unsigned int));
-
-	float val = knob_pos_to_gain (robtk_dial_get_value (ui->mtx_gain[n]));
 	if (robtk_dial_get_state (ui->mtx_gain[n]) == 1) {
 		val *= -1;
 	}
@@ -334,6 +353,7 @@ toplevel (MatMixUI* ui, void* const top)
 			robtk_dial_set_default_state (ui->mtx_gain[n], 0);
 
 			robwidget_set_mousedown (ui->mtx_gain[n]->rw, robtk_dial_mouse_intercept);
+			set_dot_color (ui->mtx_gain[n], (c == r ? 1 : 0));
 			ui->mtx_gain[n]->displaymode = 3;
 
 			if (ui->touch) {
