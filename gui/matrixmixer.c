@@ -326,6 +326,8 @@ toplevel (MatMixUI* ui, void* const top)
 			robtk_dial_set_default (ui->mtx_gain[n], knob_gain_to_pos (c == r ? 1 : 0));
 			robtk_dial_set_callback (ui->mtx_gain[n], cb_mtx_gain, ui);
 			robtk_dial_annotation_callback (ui->mtx_gain[n], dial_annotation_db, ui);
+			float detent = knob_gain_to_pos (1.f);
+			robtk_dial_set_detents (ui->mtx_gain[n], 1 , &detent);
 
 			robtk_dial_enable_states (ui->mtx_gain[n], 1);
 			robtk_dial_set_state_color (ui->mtx_gain[n], 1, 1.0, .0, .0, .3);
