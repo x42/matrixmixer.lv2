@@ -162,7 +162,7 @@ GLUICFLAGS+=-DHAVE_IDLE_IFACE
 LV2UIREQ+=lv2:requiredFeature ui:idleInterface; lv2:extensionData ui:idleInterface;
 
 # add library dependent flags and libs
-override CFLAGS += $(OPTIMIZATIONS) -DVERSION="\"$(dpl_VERSION)\""
+override CFLAGS += $(OPTIMIZATIONS) -DVERSION="\"$(matrixmixer_VERSION)\""
 override CFLAGS += `$(PKG_CONFIG) --cflags lv2`
 
 ifeq ($(XWIN),)
