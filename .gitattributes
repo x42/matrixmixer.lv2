@@ -1,5 +1,3 @@
 .gitignore export-ignore
 .gitattributes export-ignore
 /Makefile.git export-ignore
-/genttl.sh export-ignore
-/genhead.sh export-ignore
