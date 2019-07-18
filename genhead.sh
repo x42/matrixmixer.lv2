@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 N_INPUTS=$1
 N_OUTPUTS=$2
 
