@@ -226,7 +226,6 @@ $(BUILDDIR)$(LV2NAME).ttl: lv2ttl/$(LV2NAME).ttl.in lv2ttl/$(LV2NAME).gui.in Mak
 	sed "s/@LV2NAME@/$(LV2NAME)/g;s/@SIGNATURE@/$(LV2SIGN)/;s/@NAMESUFFIX@/$(NAMESUFFIX)/;s/@URISUFFIX@/$(URISUFFIX)/;s/@VERSION@/lv2:microVersion $(LV2MIC) ;lv2:minorVersion $(LV2MIN) ;/g;s/@UITTL@/$(UITTL)/" \
 	    lv2ttl/$(LV2NAME).ttl.in > $(BUILDDIR)$(LV2NAME).ttl
 	./genttl.sh $(N_INPUTS) $(N_OUTPUTS) >> $(BUILDDIR)$(LV2NAME).ttl
-	echo "]; ." >> $(BUILDDIR)$(LV2NAME).ttl
 ifneq ($(BUILDOPENGL), no)
 	sed "s/@LV2NAME@/$(LV2NAME)/g;s/@URISUFFIX@/$(URISUFFIX)/;s/@UI_TYPE@/$(UI_TYPE)/;s/@UI_REQ@/$(LV2UIREQ)/" \
 	    lv2ttl/$(LV2NAME).gui.in >> $(BUILDDIR)$(LV2NAME).ttl

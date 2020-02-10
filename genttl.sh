@@ -2,7 +2,12 @@
 N_INPUTS=$1
 N_OUTPUTS=$2
 
+URISUFFIX=i${N_INPUTS}o${N_OUTPUTS}
+
 IDX=0
+
+echo
+echo "lv2:port ["
 
 i=1; while test $i -le $N_INPUTS; do
 if test $IDX -gt 0; then
@@ -43,6 +48,7 @@ cat << EOF
     lv2:index ${IDX} ;
     lv2:symbol "mix_${i}_${j}" ;
     lv2:name "Mix ${i} ${j}" ;
+    pg:group matrixmixer:g$i;
     lv2:minimum -6.0;
     lv2:maximum  6.0;
     lv2:default  ${AMP};
@@ -55,3 +61,15 @@ EOF
 	done
 	i=$[$i + 1]
 done
+
+echo "]; ."
+echo
+
+i=1; while test $i -le $N_INPUTS; do
+	echo "matrixmixer:g$i"
+	echo ' a param:ControlGroup ;'
+	echo ' lv2:name "Source '$i'" ;'
+	echo ' lv2:symbol "InGrp'$i'" .'
+	i=$[$i + 1]
+done
+
