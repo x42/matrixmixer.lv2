@@ -14,7 +14,7 @@ libpango, libcairo, openGL (sometimes called: glu, glx, mesa), and
 optionally libjack and liblo (for jack-app with remote-control)
 
 ```bash
-git clone git://github.com/x42/matrixmixer.lv2
+git clone https://github.com/x42/matrixmixer.lv2
 cd matrixmixer.lv2
 make submodules
 make
