@@ -309,7 +309,7 @@ toplevel (MatMixUI* ui, void* const top)
 {
 	ui->rw = rob_vbox_new (FALSE, 2);
 	robwidget_make_toplevel (ui->rw, top);
-	robwidget_toplevel_enable_scaling (ui->rw);
+	robwidget_toplevel_enable_scaling (ui->rw, NULL, NULL);
 
 	ui->font = pango_font_description_from_string ("Mono 9px");
 
